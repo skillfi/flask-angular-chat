@@ -1,6 +1,7 @@
 export interface Message {
   from?: string;
-  to: string;
-  message: string;
-  date: Date;
+  message?: string;
+  date?: Date;
+  student?: object;
+  room?: string;
 }

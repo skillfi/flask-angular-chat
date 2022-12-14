@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ChatService } from '../chat.service';
+import {Chat, StudentDetails} from "../../models/user-details.model";
+import {LoginService} from "../../login/login.service";
 
 @Component({
   selector: 'app-users-list',
@@ -8,7 +10,8 @@ import { ChatService } from '../chat.service';
 })
 export class UsersListComponent implements OnInit {
   users: any;
-  constructor(public chat: ChatService) { }
+  history: Chat[] = [];
+  constructor(public chat: ChatService, public login: LoginService) { }
 
   ngOnInit(): void {
     this.chat.getUsers().subscribe(users => {
@@ -19,9 +22,16 @@ export class UsersListComponent implements OnInit {
 
   openChat(event, user) {
     this.chat.chattingWith.next({
-      name: user.value,
+      email: user.value,
+      password: user.value,
       id: user.key
     })
+    this.chat.uploadHistory(`team_${this.login.Student.current_team_id}`)
+    this.chat.get_history().subscribe(history => {
+      console.log(history)
+      this.chat.history.push(history);
+    })
+
   }
 
 }

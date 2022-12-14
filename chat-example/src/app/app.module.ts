@@ -38,7 +38,7 @@ const config: SocketIoConfig = { url: environment.url, options: {} };
     FormsModule,
     ReactiveFormsModule,
     FilterPipeModule,
-    SocketIoModule.forRoot(config)
+    SocketIoModule.forRoot(config),
   ],
   providers: [LoginService, ChatService],
   bootstrap: [AppComponent]

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserDetails } from '../models/user-details.model';
+import { Chat, UserDetails } from '../models/user-details.model';
 import { Socket } from 'ngx-socket-io';
 import { map } from 'rxjs/operators';
 import { Message } from '../models/message.model';
@@ -11,11 +11,13 @@ import { Subject } from 'rxjs';
 export class ChatService {
   user: UserDetails;
   messages: Message[] = [];
+  history: Chat[] = [];
   chattingWith = new Subject<UserDetails>();
 
-  constructor(private socket: Socket) {}
+  constructor(private socket: Socket) { }
 
   sendMessage(message: Message) {
+    console.log(message)
     this.socket.emit('message', message);
   }
 
@@ -25,6 +27,15 @@ export class ChatService {
 
   getUsers() {
     return this.socket.fromEvent('current_users').pipe(map((data: any) => data))
+  }
+
+  uploadHistory(room_id: string) {
+    console.log(room_id)
+    this.socket.emit('history', room_id)
+  }
+
+  get_history() {
+    return this.socket.fromEvent('history').pipe(map((data: any) => data))
   }
 
 
